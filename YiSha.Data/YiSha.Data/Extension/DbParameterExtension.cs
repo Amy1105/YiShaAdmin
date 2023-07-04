@@ -25,6 +25,8 @@ namespace YiSha.Data
 
                 case DatabaseType.Oracle:
                     return new OracleParameter();
+                case DatabaseType.Sqlite:
+                    return new MySqlParameter();
 
                 default:
                     throw new Exception("数据库类型目前不支持！");

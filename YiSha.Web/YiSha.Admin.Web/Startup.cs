@@ -19,6 +19,7 @@ using YiSha.Util;
 using YiSha.Util.Model;
 using YiSha.Admin.Web.Controllers;
 using Microsoft.Extensions.Logging;
+using YiSha.Data.EF;
 
 namespace YiSha.Admin.Web
 {
@@ -63,7 +64,7 @@ namespace YiSha.Admin.Web
             services.AddMemoryCache();
             services.AddSession();
             services.AddHttpContextAccessor();
-
+            services.AddTransient(typeof(SqliteDbContext));
             services.AddOptions();
 
             services.AddDataProtection().PersistKeysToFileSystem(new DirectoryInfo(GlobalContext.HostingEnvironment.ContentRootPath + Path.DirectorySeparatorChar + "DataProtection"));
@@ -91,7 +92,7 @@ namespace YiSha.Admin.Web
             {
                 app.UseExceptionHandler("/Home/Error");
             }
-
+           
             string resource = Path.Combine(env.ContentRootPath, "Resource");
             FileHelper.CreateDirectory(resource);
 

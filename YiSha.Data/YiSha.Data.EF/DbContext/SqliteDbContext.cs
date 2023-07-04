@@ -9,13 +9,13 @@ using YiSha.Util;
 
 namespace YiSha.Data.EF
 {
-    public class MySqlDbContext : DbContext
+    public class SqliteDbContext : DbContext
     {
         private static readonly ILoggerFactory _loggerFactory = LoggerFactory.Create(builder => builder.AddConsole());
 
         private string ConnectionString { get; set; }
 
-        public MySqlDbContext(string connectionString)
+        public SqliteDbContext(string connectionString)
         {
             ConnectionString = connectionString;
         }
@@ -24,17 +24,16 @@ namespace YiSha.Data.EF
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseMySql(ConnectionString, ServerVersion.AutoDetect(ConnectionString), p => p.CommandTimeout(GlobalContext.SystemConfig.DBCommandTimeout));
+            optionsBuilder.UseSqlite(ConnectionString);
             optionsBuilder.AddInterceptors(new DbCommandCustomInterceptor());
             optionsBuilder.UseLoggerFactory(_loggerFactory);
             // 这里需要注意，不能采用这种写法：optionsBuilder.UseLoggerFactory(LoggerFactory.Create(builder => builder.AddConsole()));
-            // 会导致内存泄露的问题   
-
-            //为什么？
+            // 会导致内存泄露的问题
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            //注册所有实体
             Assembly entityAssembly = Assembly.Load(new AssemblyName("YiSha.Entity"));
             IEnumerable<Type> typesToRegister = entityAssembly.GetTypes().Where(p => !string.IsNullOrEmpty(p.Namespace))
                                                                          .Where(p => !string.IsNullOrEmpty(p.GetCustomAttribute<TableAttribute>()?.Name));

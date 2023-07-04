@@ -33,6 +33,9 @@ namespace YiSha.Business.SystemManage
                 case "Oracle":
                     databaseTableService = new DatabaseTableOracleService();
                     break;
+                case "Sqlite":
+                    databaseTableService = new DatabaseTableSqliteService();
+                    break;
                 default:
                     throw new Exception("未找到数据库配置");
             }
