@@ -43,6 +43,8 @@ namespace YiSha.Admin.Web
             {
                 services.AddRazorPages().AddRazorRuntimeCompilation();
             }
+            services.AddDbContext<SqliteDbContext>();
+
             services.Configure<CookiePolicyOptions>(options =>
             {
                 // This lambda determines whether user consent for non-essential cookies is needed for a given request.
@@ -63,8 +65,7 @@ namespace YiSha.Admin.Web
 
             services.AddMemoryCache();
             services.AddSession();
-            services.AddHttpContextAccessor();
-            services.AddTransient(typeof(SqliteDbContext));
+            services.AddHttpContextAccessor();          
             services.AddOptions();
 
             services.AddDataProtection().PersistKeysToFileSystem(new DirectoryInfo(GlobalContext.HostingEnvironment.ContentRootPath + Path.DirectorySeparatorChar + "DataProtection"));

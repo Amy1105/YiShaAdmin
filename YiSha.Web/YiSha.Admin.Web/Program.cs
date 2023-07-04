@@ -13,7 +13,8 @@ namespace YiSha.Admin.Web
     {
         public static void Main(string[] args)
         {
-            var host = CreateWebHostBuilder(args).Build();
+            //CreateWebHostBuilder
+            var host = CreateHostBuilder(args).Build();
             CreateDbIfNotExists(host);
             host.Run();
         }
@@ -29,14 +30,16 @@ namespace YiSha.Admin.Web
                    }).UseNLog();
 
 
-        private static void CreateDbIfNotExists(IWebHost host)
+        private static void CreateDbIfNotExists(IHost host)
         {
             using (var scope = host.Services.CreateScope())
             {
                 var services = scope.ServiceProvider;
                 try
                 {
-                    var context = services.GetRequiredService<SqliteDbContext>();
+                    string connstr = "Data Source=Data/YiShaDB;";
+                    SqliteDbContext context = new SqliteDbContext(connstr);
+                    //var context = services.GetRequiredService<SqliteDbContext>();
                     context.Database.EnsureCreated();
                     //DbInitializer.Initialize(context);
                 }
